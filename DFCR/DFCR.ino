@@ -14,6 +14,9 @@ const int analog_read = A1;
 const int analog_write = A0;
 const int sample_rate_read = 10000;  // set to 100 us
 
+float x_min = 1023;
+float x_max = 0;
+
 void setup() { // put your setup code here, to run once:
   MyTimer5.begin(sample_rate_read); // 200=for toggle every 5msec
   MyTimer5.attachInterrupt(readsignal); //Digital Pins=3 with Interrupts
@@ -33,6 +36,17 @@ void readsignal()
 
 void loop() {  
   x = analogRead(analog_read);
+  if (x > x_max){
+    x_max = x;
+    Serial.print("X max: ");
+    Serial.println(x_max);
+  }
+  if (x < x_min){
+    x_min = x;
+    Serial.print("X min: ");
+    Serial.println(x_min);
+  }  
+  
   y = alpha*x + (1-alpha)*y_prev; // LowPassFilter
   
   if (y != y_prev){
