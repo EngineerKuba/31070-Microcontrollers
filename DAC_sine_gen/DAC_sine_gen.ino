@@ -1,5 +1,5 @@
 //***************ZeroWaveGen Sketch**************************************
-//This sketch generates a sine wave on the Arduino Zero DAC based on user entered sample count and sample rate
+//This sketch generates a sine wave on the Arduino based on user entered sample count and sample rate
 //It was used in a tutorial video on the ForceTronics YouTube Channel. This code can be used and modified freely
 //at the users own risk
 volatile int sIndex; //Tracks sinewave points in array
