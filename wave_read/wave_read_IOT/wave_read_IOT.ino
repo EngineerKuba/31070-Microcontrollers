@@ -12,9 +12,11 @@ const int sample_rate_read = 10000;  // set to 100 us
 
 void setup() { // put your setup code here, to run once:
   Serial.begin(9600);
-  delay(1500); 
+  //"uncomment in IOT"
+  //delay(1500); 
   //initProperties();
-  // Connect to Arduino IoT Cloud
+  //"Connect to Arduino IoT Cloud"
+  //"uncomment in IOT"
   //ArduinoCloud.begin(ArduinoIoTPreferredConnection);
   //setDebugMessageLevel(2);
   //ArduinoCloud.printDebugInfo();
@@ -26,6 +28,7 @@ void setup() { // put your setup code here, to run once:
 
 void readsignal()
 {
+  //"uncomment in IOT"
   //ArduinoCloud.update();
   float x = analogRead(A1);
   float y = 0.0278*x + (1-0.0278)*y_prev;
@@ -52,7 +55,7 @@ void loop() {
       }
     }
     else{
-      //Serial.println("ArduinoCloud.update();");
+      //"uncomment in IOT"
       //ArduinoCloud.update();
     }
 }
