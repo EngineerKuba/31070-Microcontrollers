@@ -9,21 +9,22 @@ volatile int Z_cross;
 volatile int ISR_count;
 volatile int previous_ms = 0;
 
-const float alpha = 0.0278; /* 50Hz = 0.02799, 10Hz = 0.00572, 100Hz = 0.05446*/
+float alpha;
+
 const int analog_read = A1;
 const int analog_write = A0;
-const int sample_rate_read = 10000;  // set to 100 us
+const int sample_rate = 10000;  // set to 100 us
+const int sample_rate_real = 10927; // myTimer in reality makes 10927 not 10000
+const int cut_off_freq = 50;
 
-float x_min = 1023;
-float x_max = 0;
-
-void setup() { // put your setup code here, to run once:
-  MyTimer5.begin(sample_rate_read); // 200=for toggle every 5msec
+void setup() {
+  MyTimer5.begin(sample_rate);
   MyTimer5.attachInterrupt(readsignal); //Digital Pins=3 with Interrupts
   analogReadResolution(10);   
   analogWriteResolution(10);
   Serial.begin(115200);
-  lcdInit();
+  lcdInit(); // set pins for the screen
+  alpha = getAlpha(sample_rate_real, cut_off_freq); // for low pass filter 
 }
 
 void readsignal()
@@ -35,19 +36,8 @@ void readsignal()
 }
 
 void loop() {  
-  x = analogRead(analog_read);
-  if (x > x_max){
-    x_max = x;
-    Serial.print("X max: ");
-    Serial.println(x_max);
-  }
-  if (x < x_min){
-    x_min = x;
-    Serial.print("X min: ");
-    Serial.println(x_min);
-  }  
-  
-  y = alpha*x + (1-alpha)*y_prev; // LowPassFilter
+  x = analogRead(analog_read); 
+  y = lowPassFilter(x, alpha);
   
   if (y != y_prev){
     y_prev_prev = y_prev;
@@ -59,7 +49,6 @@ void loop() {
     Frequency = Z_cross/(ISR_count*0.00009158*1.0005);
     ISR_count = 0;
     Z_cross = 0;
-    Serial.println(Frequency);
     }
     
   analogWrite(A0, x);

@@ -14,14 +14,14 @@ void lcdInit(){
   lcd.print("to refresh data.");
 }
 
-void lcdRefresh(float RMSVoltage, float Frequency){
+void lcdRefresh(float RMS_voltage, float Frequency){
   switch_state = digitalRead(switch_pin);
   if (switch_state != prev_switch_state){
     if (switch_state == LOW){
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("Vol[V]: ");
-      lcd.print(RMSVoltage);
+      lcd.print(RMS_voltage);
       lcd.setCursor(0, 1);
       lcd.print("Freq[Hz]: ");
       lcd.print(Frequency);      
