@@ -5,10 +5,12 @@ volatile float y_prev;
 volatile float y_prev_prev;
 volatile int Z_cross;
 volatile int Timer;
+volatile float x;
+volatile float y;
 volatile float Frequency;
 //const int analog_read = A1;
 //const int analog_write = A0;
-const int sample_rate_read = 10000;  // set to 100 us
+const int sample_rate_read = 10000;  // set to 100 uslejer
 
 void setup() { // put your setup code here, to run once:
   Serial.begin(9600);
@@ -30,8 +32,7 @@ void readsignal()
 {
   //"uncomment in IOT"
   //ArduinoCloud.update();
-  float x = analogRead(A1);
-  float y = 0.0278*x + (1-0.0278)*y_prev;
+
 
   if (y != y_prev){
     y_prev_prev = y_prev;
@@ -46,6 +47,9 @@ void readsignal()
 // Wiring.c : C:\Users\Simon\Documents\ArduinoData\packages\arduino\hardware\samd\1.8.12\cores\arduino
 
 void loop() {  
+  x = analogRead(A1);
+  y = 0.0278*x + (1-0.0278)*y_prev;
+  
   if (((millis()/1000) & 0x01) == 0){
       if (Z_cross >= 300){
         Frequency = Z_cross/(Timer*0.00009158347);
